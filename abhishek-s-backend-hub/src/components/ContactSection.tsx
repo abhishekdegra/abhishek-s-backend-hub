@@ -15,9 +15,12 @@ const ContactSection = () => {
 
   const [loading, setLoading] = useState(false);
 
-  // 🔥 UPDATED SUBMIT FUNCTION (API + TOAST + LOADER)
+  // ✅ FIXED SUBMIT FUNCTION
   const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
+    e.preventDefault(); // 🔥 IMPORTANT (no redirect)
+
+    if (loading) return;
+
     setLoading(true);
 
     try {
@@ -70,31 +73,34 @@ const ContactSection = () => {
             </p>
 
             <div className="space-y-4">
-              {[
-                { icon: Linkedin, label: "LinkedIn", href: "https://www.linkedin.com/in/abhishek-degra/", text: "abhishek-degra" },
-                { icon: Github, label: "GitHub", href: "https://github.com/abhishekdegra", text: "abhishekdegra" },
-                { icon: Mail, label: "Email", href: "mailto:degraabhishek@gmail.com", text: "degraabhishek@gmail.com" },
-              ].map((s) => (
-                <a
-                  key={s.label}
-                  href={s.href}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="flex items-center gap-4 glass-card p-4 hover:border-primary/40 transition-all group"
-                >
-                  <div className="p-2 rounded-lg bg-primary/10 text-primary group-hover:scale-110 transition-transform">
-                    <s.icon size={20} />
-                  </div>
-                  <div>
-                    <p className="text-xs text-muted-foreground">{s.label}</p>
-                    <p className="text-sm text-foreground">{s.text}</p>
-                  </div>
-                </a>
-              ))}
+              <a
+                href="https://www.linkedin.com/in/abhishek-degra/"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="flex items-center gap-4 glass-card p-4 hover:border-primary/40 transition-all"
+              >
+                <Linkedin size={20} /> LinkedIn
+              </a>
+
+              <a
+                href="https://github.com/abhishekdegra"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="flex items-center gap-4 glass-card p-4 hover:border-primary/40 transition-all"
+              >
+                <Github size={20} /> GitHub
+              </a>
+
+              <a
+                href="mailto:degraabhishek@gmail.com"
+                className="flex items-center gap-4 glass-card p-4 hover:border-primary/40 transition-all"
+              >
+                <Mail size={20} /> Email
+              </a>
             </div>
           </motion.div>
 
-          {/* Contact form */}
+          {/* ✅ FIXED FORM */}
           <motion.form
             onSubmit={handleSubmit}
             initial={{ opacity: 0, x: 30 }}
@@ -108,7 +114,7 @@ const ContactSection = () => {
               required
               value={form.name}
               onChange={(e) => setForm({ ...form, name: e.target.value })}
-              className="w-full px-4 py-3 rounded-lg bg-secondary border border-border text-foreground placeholder:text-muted-foreground text-sm focus:outline-none focus:border-primary/50 transition-colors"
+              className="w-full px-4 py-3 rounded-lg bg-secondary border border-border text-foreground text-sm focus:outline-none"
             />
 
             <input
@@ -117,7 +123,7 @@ const ContactSection = () => {
               required
               value={form.email}
               onChange={(e) => setForm({ ...form, email: e.target.value })}
-              className="w-full px-4 py-3 rounded-lg bg-secondary border border-border text-foreground placeholder:text-muted-foreground text-sm focus:outline-none focus:border-primary/50 transition-colors"
+              className="w-full px-4 py-3 rounded-lg bg-secondary border border-border text-foreground text-sm focus:outline-none"
             />
 
             <textarea
@@ -126,13 +132,13 @@ const ContactSection = () => {
               required
               value={form.message}
               onChange={(e) => setForm({ ...form, message: e.target.value })}
-              className="w-full px-4 py-3 rounded-lg bg-secondary border border-border text-foreground placeholder:text-muted-foreground text-sm focus:outline-none focus:border-primary/50 transition-colors resize-none"
+              className="w-full px-4 py-3 rounded-lg bg-secondary border border-border text-foreground text-sm focus:outline-none resize-none"
             />
 
             <button
               type="submit"
               disabled={loading}
-              className="w-full px-6 py-3 rounded-lg font-medium text-primary-foreground bg-gradient-to-r from-primary to-accent hover:opacity-90 transition-opacity flex items-center justify-center gap-2"
+              className="w-full px-6 py-3 rounded-lg bg-gradient-to-r from-primary to-accent text-white flex items-center justify-center gap-2"
             >
               {loading ? "⏳ Sending..." : (
                 <>
