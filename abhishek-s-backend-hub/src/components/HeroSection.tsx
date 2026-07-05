@@ -25,7 +25,7 @@ const HeroSection = () => {
           transition={{ duration: 0.6 }}
         >
           <span className="inline-block px-4 py-1.5 rounded-full text-xs font-mono border border-primary/30 text-primary mb-6">
-            Python Backend Developer
+            Python Backend & AI Developer
           </span>
         </motion.div>
 
@@ -45,7 +45,7 @@ const HeroSection = () => {
           transition={{ duration: 0.6, delay: 0.3 }}
           className="text-lg md:text-xl text-muted-foreground max-w-2xl mx-auto mb-10"
         >
-          Backend Developer specializing in Python, Django and scalable REST API development.
+          Building scalable backend systems, REST APIs, and intelligent AI-powered applications using Python, Django, FastAPI, RAG, and modern AI technologies.
         </motion.p>
 
         <motion.div

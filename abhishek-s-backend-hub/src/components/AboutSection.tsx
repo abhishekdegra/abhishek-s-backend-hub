@@ -21,20 +21,20 @@ const AboutSection = () => {
           <div className="w-16 h-1 bg-gradient-to-r from-primary to-accent rounded mb-8" />
         </motion.div>
 
-        <div className="grid md:grid-cols-2 gap-10 items-start">
+        <div className="grid md:grid-cols-[1fr_380px] gap-10 items-center">
           <motion.div
             initial={{ opacity: 0, x: -30 }}
             animate={inView ? { opacity: 1, x: 0 } : {}}
             transition={{ duration: 0.6, delay: 0.2 }}
           >
             <p className="text-muted-foreground leading-relaxed mb-4">
-              I am a B.Tech student in Artificial Intelligence and Data Science at Rajasthan Technical University and currently working as a Python Developer Trainee.
+              I am a Python Backend Developer specializing in building scalable backend systems, REST APIs, and AI-powered applications. With hands-on experience in Django, Django REST Framework, FastAPI, MySQL, and modern AI technologies, I enjoy transforming complex requirements into efficient and practical solutions.
             </p>
             <p className="text-muted-foreground leading-relaxed mb-4">
-              I specialize in backend development using Python, Django, Django REST Framework, and MySQL. I enjoy designing scalable backend architectures, developing secure REST APIs, and optimizing database performance.
+              My experience includes developing backend systems, integrating third-party APIs, and building custom AI agents using RAG, vector embeddings, semantic search, multilingual query understanding, and dynamic tool routing.
             </p>
             <p className="text-muted-foreground leading-relaxed">
-              I am passionate about solving real-world problems using clean code, efficient algorithms, and modern backend technologies.
+              I am passionate about solving real-world problems, exploring modern AI technologies, and continuously improving my skills in backend engineering, intelligent systems, and scalable application development.
             </p>
           </motion.div>
 
@@ -42,23 +42,25 @@ const AboutSection = () => {
             initial={{ opacity: 0, x: 30 }}
             animate={inView ? { opacity: 1, x: 0 } : {}}
             transition={{ duration: 0.6, delay: 0.4 }}
-            className="grid grid-cols-1 gap-4"
+            className="glass-card p-4 border border-border/50 shadow-xl overflow-hidden"
           >
-            {[
-              { icon: Server, label: "Backend Architecture", desc: "Django & REST APIs" },
-              { icon: Database, label: "Database Design", desc: "MySQL & SQL optimization" },
-              { icon: Code2, label: "Clean Code", desc: "Scalable & maintainable systems" },
-            ].map((item, i) => (
-              <div key={i} className="glass-card p-4 flex items-center gap-4 hover:border-primary/30 transition-colors group">
-                <div className="p-3 rounded-lg bg-primary/10 text-primary group-hover:animate-pulse-glow transition-all">
-                  <item.icon size={22} />
-                </div>
-                <div>
-                  <h4 className="font-semibold text-foreground">{item.label}</h4>
-                  <p className="text-sm text-muted-foreground">{item.desc}</p>
-                </div>
-              </div>
-            ))}
+            <div className="relative overflow-hidden rounded-[2rem] bg-gradient-to-br from-primary/10 to-accent/10">
+              <img
+                src="/profile.jpg"
+                alt="Abhishek Degra"
+                onError={(e) => {
+                  e.currentTarget.onerror = null;
+                  e.currentTarget.src = "/placeholder.svg";
+                }}
+                className="w-full aspect-square object-cover"
+              />
+            </div>
+            <div className="mt-6 text-center">
+              <h3 className="text-xl font-semibold text-foreground mb-1">Abhishek Degra</h3>
+              <p className="text-sm text-muted-foreground">
+                Python Backend & AI Developer
+              </p>
+            </div>
           </motion.div>
         </div>
       </div>

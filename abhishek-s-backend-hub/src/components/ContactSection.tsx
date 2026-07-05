@@ -17,14 +17,31 @@ const ContactSection = () => {
 
   // ✅ FIXED SUBMIT FUNCTION
   const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault(); // 🔥 IMPORTANT (no redirect)
+    e.preventDefault(); // no redirect
 
     if (loading) return;
 
+    // Basic client-side validation
+    if (!form.name.trim() || !form.email.trim() || !form.message.trim()) {
+      toast.error("Please fill in all fields");
+      return;
+    }
+
+    // Simple email format check
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailRegex.test(form.email)) {
+      toast.error("Please enter a valid email address");
+      return;
+    }
+
     setLoading(true);
 
+    // Use env-configured API base if provided (Vite env var: VITE_API_BASE)
+    const apiBase = (import.meta as any).env?.VITE_API_BASE || "https://backend-web-portfolio.onrender.com";
+    const endpoint = `${apiBase.replace(/\/$/, '')}/api/contact/send/`;
+
     try {
-      const res = await fetch("https://backend-web-portfolio.onrender.com/api/contact/", {
+      const res = await fetch(endpoint, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -34,11 +51,12 @@ const ContactSection = () => {
 
       const data = await res.json();
 
-      if (data.status === "success") {
+      if (res.ok && data.status === "success") {
         toast.success("Message sent successfully 🔥");
         setForm({ name: "", email: "", message: "" });
       } else {
-        toast.error("Failed to send message ❌");
+        const err = data?.error || "Failed to send message";
+        toast.error(err);
       }
     } catch (error) {
       toast.error("Server error ❌");

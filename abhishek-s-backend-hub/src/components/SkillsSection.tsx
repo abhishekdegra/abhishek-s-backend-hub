@@ -6,30 +6,42 @@ const skillCategories = [
     title: "Programming",
     skills: [
       { name: "Python", level: 90 },
-      { name: "Java", level: 65 },
-      { name: "C++", level: 60 },
+      { name: "Java", level: 70 },
+      { name: "C++", level: 65 },
     ],
   },
   {
     title: "Backend",
     skills: [
-      { name: "Django", level: 85 },
-      { name: "Django REST Framework", level: 85 },
+      { name: "Django", level: 90 },
+      { name: "Django REST Framework", level: 90 },
+      { name: "FastAPI", level: 80 },
       { name: "REST APIs", level: 90 },
     ],
   },
   {
     title: "Database",
     skills: [
-      { name: "MySQL", level: 80 },
-      { name: "SQL", level: 80 },
+      { name: "MySQL", level: 85 },
+      { name: "SQL", level: 85 },
+    ],
+  },
+  {
+    title: "Tools",
+    skills: [
+      { name: "Cursor AI", level: 90 },
+      { name: "Claude AI", level: 85 },
+      { name: "Postman", level: 85 },
+      { name: "Git", level: 80 },
+      { name: "GitHub", level: 85 },
     ],
   },
   {
     title: "Other",
     skills: [
-      { name: "Git / GitHub", level: 75 },
-      { name: "DSA", level: 70 },
+      { name: "DSA", level: 75 },
+      { name: "RAG", level: 85 },
+      { name: "Vector Embeddings", level: 80 },
     ],
   },
 ];
@@ -52,7 +64,7 @@ const SkillsSection = () => {
           <div className="w-16 h-1 bg-gradient-to-r from-primary to-accent rounded mb-10" />
         </motion.div>
 
-        <div className="grid md:grid-cols-2 gap-8">
+        <div className="grid grid-cols-1 gap-8 md:grid-cols-2 xl:grid-cols-3">
           {skillCategories.map((cat, ci) => (
             <motion.div
               key={cat.title}
@@ -63,7 +75,7 @@ const SkillsSection = () => {
             >
               <h3 className="text-lg font-semibold mb-5 text-primary">{cat.title}</h3>
               <div className="space-y-4">
-                {cat.skills.map((skill) => (
+                {cat.skills.map((skill, si) => (
                   <div key={skill.name}>
                     <div className="flex justify-between mb-1.5">
                       <span className="text-sm font-medium text-foreground">{skill.name}</span>
@@ -71,10 +83,16 @@ const SkillsSection = () => {
                     </div>
                     <div className="h-2 rounded-full bg-secondary overflow-hidden">
                       <div
-                        className="h-full rounded-full bg-gradient-to-r from-primary to-accent skill-bar-fill"
+                        className="h-full rounded-full bg-gradient-to-r from-primary to-accent"
                         style={{
                           width: inView ? `${skill.level}%` : "0%",
-                          animationDelay: `${ci * 0.2}s`,
+                          transition: inView
+                            ? `width 1.2s cubic-bezier(0.22,1,0.36,1) ${(
+                                ci * 0.12 + si * 0.08
+                              ).toFixed(2)}s`
+                            : undefined,
+                          // Ensure previous CSS keyframe doesn't run if present
+                          animation: "none",
                         }}
                       />
                     </div>

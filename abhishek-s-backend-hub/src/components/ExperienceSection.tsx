@@ -3,10 +3,24 @@ import { useRef } from "react";
 import { Briefcase } from "lucide-react";
 
 const experiences = [
+  
   {
-    role: "Python Developer Trainee",
+  role: "Python & AI Backend Developer",
+  company: "Welfog",
+  period: "May 2026 - Present",
+  responsibilities: [
+    "Developing an AI-powered customer support agent for an e-commerce platform",
+    "Implemented RAG, vector embeddings and semantic search for knowledge retrieval",
+    "Integrated REST APIs for products, orders, refunds, tracking and invoices",
+    "Built intelligent intent detection, entity extraction and dynamic tool routing",
+    "Implemented multilingual query understanding and multi-LLM integrations",
+    "Optimized AI workflows to reduce LLM calls and improve response time",
+   ],
+ },
+  {
+    role: "Python Developer",
     company: "ATS Global Tech",
-    period: "Oct 2025 – Present",
+    period: "Oct 2025 – Apr 2026",
     responsibilities: [
       "Built backend applications using Django",
       "Developed REST APIs using Django REST Framework",

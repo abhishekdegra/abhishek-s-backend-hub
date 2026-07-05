@@ -4,6 +4,22 @@ import { ExternalLink } from "lucide-react";
 
 const projects = [
   {
+    title: "AI-Powered E-Commerce Customer Support Agent",
+    description: "Built a custom AI-powered customer support agent for an e-commerce platform with intelligent query understanding, multilingual support, real-time API integration, and dynamic tool routing.",
+    features: [
+      "Intelligent intent detection and entity extraction",
+      "RAG-based knowledge retrieval for policies and FAQs",
+      "Vector embeddings and semantic search",
+      "Dynamic tool routing for products, orders, refunds, tracking, invoices, and user queries",
+      "Multilingual and Hinglish query understanding",
+      "Real-time integration with e-commerce backend APIs",
+      "Multi-LLM integration and fallback support",
+      "Optimized AI workflow to reduce unnecessary LLM calls and response time",
+    ],
+    tech: ["Python", "Django REST Framework", "RAG", "Vector Embeddings", "LLM APIs", "REST APIs"],
+    github: "https://github.com/abhishekdegra/ai-agent-for-welfog.git",
+  },
+  {
     title: "CRM Backend System",
     description: "Built a CRM backend system using Django REST Framework and MySQL.",
     features: ["CRUD APIs for leads, customers, tickets and services", "Filtering, pagination and search", "JWT authentication", "Role-based access control", "Postman tested APIs"],
