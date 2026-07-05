@@ -1,0 +1,7 @@
+{
+  "name": "portfolio-root",
+  "private": true,
+  "scripts": {
+    "build": "cd abhishek-s-backend-hub && npm run build"
+  }
+}
