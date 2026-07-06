@@ -5,7 +5,6 @@ import urllib.error
 
 from django.conf import settings
 from django.core.exceptions import ValidationError
-from django.core.mail import send_mail
 from django.core.validators import validate_email
 from django.http import JsonResponse
 from django.views.decorators.csrf import csrf_exempt
@@ -52,68 +51,95 @@ def send_contact_email(request):
                 "error_type": type(e).__name__,
             }, status=400)
 
-        full_message = f"Name: {name}\nEmail: {email}\nMessage: {message}"
+        step = "check_config"
+        if not settings.RESEND_API_KEY:
+            logger.error("Resend API key is missing")
+            return JsonResponse({"success": False, "step": step, "error": "Email provider not configured"}, status=500)
+        if not settings.CONTACT_EMAIL:
+            logger.error("Contact email is missing")
+            return JsonResponse({"success": False, "step": step, "error": "Recipient email is not configured"}, status=500)
+
+        full_message = f"Visitor Name: {name}\nVisitor Email: {email}\nVisitor Message:\n{message}"
         logger.info("Contact request received for email=%s", email)
 
         step = "send_email"
-        if getattr(settings, "SENDGRID_API_KEY", None):
-            request_body = json.dumps({
-                "personalizations": [{"to": [{"email": settings.SENDGRID_TO_EMAIL}]}],
-                "from": {"email": settings.SENDGRID_FROM_EMAIL},
-                "subject": "New Contact Message",
-                "content": [{"type": "text/plain", "value": full_message}],
-            }).encode("utf-8")
-            req = urllib.request.Request(
-                "https://api.sendgrid.com/v3/mail/send",
-                data=request_body,
-                method="POST",
-                headers={
-                    "Authorization": f"Bearer {settings.SENDGRID_API_KEY}",
-                    "Content-Type": "application/json",
-                },
+        payload_data = {
+            "from": settings.RESEND_FROM_EMAIL,
+            "to": [settings.CONTACT_EMAIL],
+            "subject": "New Portfolio Contact Message",
+            "text": full_message,
+            "html": f"<p><strong>Name:</strong> {name}</p><p><strong>Email:</strong> {email}</p><p><strong>Message:</strong></p><p>{message}</p>",
+            "reply_to": email,
+        }
+        logger.info("Resend request payload: %s", json.dumps({
+            "from": payload_data["from"],
+            "to": payload_data["to"],
+            "subject": payload_data["subject"],
+            "reply_to": payload_data["reply_to"],
+        }))
+
+        payload = json.dumps(payload_data).encode("utf-8")
+
+        request_obj = urllib.request.Request(
+            "https://api.resend.com/emails",
+            data=payload,
+            method="POST",
+            headers={
+                "Authorization": f"Bearer {settings.RESEND_API_KEY}",
+                "Content-Type": "application/json",
+                "Accept": "application/json",
+                "User-Agent": "Django/ResendContactClient",
+            },
+        )
+
+        try:
+            logger.info(
+                "Sending Resend email from=%s to=%s reply_to=%s",
+                settings.RESEND_FROM_EMAIL,
+                settings.CONTACT_EMAIL,
+                email,
             )
-            try:
-                with urllib.request.urlopen(req, timeout=10) as response:
-                    status_code = response.getcode()
-                    response_body = response.read().decode("utf-8", errors="ignore")
-                logger.info("SendGrid response status=%s body=%s", status_code, response_body)
-                if status_code >= 400:
-                    raise Exception(f"SendGrid returned status {status_code}: {response_body}")
-            except urllib.error.HTTPError as e:
-                body = e.read().decode("utf-8", errors="ignore")
-                logger.exception("SendGrid HTTP error")
-                return JsonResponse({
-                    "success": False,
-                    "step": step,
-                    "error": "Failed to send email via SendGrid",
-                    "error_type": type(e).__name__,
-                    "details": body,
-                }, status=500)
-            except Exception as e:
-                logger.exception("SendGrid request failed")
-                return JsonResponse({
-                    "success": False,
-                    "step": step,
-                    "error": "Failed to send email via SendGrid",
-                    "error_type": type(e).__name__,
-                }, status=500)
-        else:
-            try:
-                send_mail(
-                    subject="New Contact Message",
-                    message=full_message,
-                    from_email=settings.EMAIL_HOST_USER,
-                    recipient_list=[settings.EMAIL_HOST_USER],
-                    fail_silently=False,
-                )
-            except Exception as e:
-                logger.exception("SMTP email send failed")
-                return JsonResponse({
-                    "success": False,
-                    "step": step,
-                    "error": "Failed to send email via SMTP",
-                    "error_type": type(e).__name__,
-                }, status=500)
+            with urllib.request.urlopen(request_obj, timeout=settings.RESEND_REQUEST_TIMEOUT) as response:
+                status_code = response.getcode()
+                response_body = response.read().decode("utf-8", errors="ignore")
+            logger.info("Resend response status=%s body=%s", status_code, response_body)
+            if status_code >= 400:
+                raise Exception(f"Resend returned status {status_code}: {response_body}")
+        except urllib.error.HTTPError as e:
+            body = e.read().decode("utf-8", errors="ignore")
+            headers = dict(e.headers) if e.headers is not None else {}
+            logger.error(
+                "Resend HTTP error status=%s reason=%s headers=%s body=%s",
+                getattr(e, 'code', None),
+                getattr(e, 'reason', None),
+                headers,
+                body,
+            )
+            return JsonResponse({
+                "success": False,
+                "step": step,
+                "error": "Failed to send email",
+                "error_type": type(e).__name__,
+                "status": getattr(e, 'code', None),
+                "details": body,
+            }, status=getattr(e, 'code', 500))
+        except urllib.error.URLError as e:
+            logger.error("Resend URL error: %s", str(e))
+            return JsonResponse({
+                "success": False,
+                "step": step,
+                "error": "Failed to send email",
+                "error_type": type(e).__name__,
+                "details": str(e),
+            }, status=500)
+        except Exception as e:
+            logger.exception("Resend request failed")
+            return JsonResponse({
+                "success": False,
+                "step": step,
+                "error": "Failed to send email",
+                "error_type": type(e).__name__,
+            }, status=500)
 
         return JsonResponse({"success": True}, status=200)
     except Exception as e:

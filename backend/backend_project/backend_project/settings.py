@@ -107,20 +107,20 @@ USE_TZ = True
 # ================= STATIC =================
 STATIC_URL = "static/"
 
-# ================= EMAIL =================
-EMAIL_BACKEND = "django.core.mail.backends.smtp.EmailBackend"
-EMAIL_HOST = "smtp.gmail.com"
-EMAIL_PORT = 587
-EMAIL_USE_TLS = True
-EMAIL_TIMEOUT = 10
+# ================= EMAIL / RESEND =================
+RESEND_API_KEY = config("RESEND_API_KEY", default=None)
+if RESEND_API_KEY is not None:
+    RESEND_API_KEY = RESEND_API_KEY.strip()
+CONTACT_EMAIL = config("CONTACT_EMAIL", default=None)
+if CONTACT_EMAIL is not None:
+    CONTACT_EMAIL = CONTACT_EMAIL.strip()
+RESEND_FROM_EMAIL = config("RESEND_FROM_EMAIL", default="onboarding@resend.dev").strip()
+RESEND_REQUEST_TIMEOUT = config("RESEND_REQUEST_TIMEOUT", default=10, cast=int)
 
-EMAIL_HOST_USER = config("EMAIL_HOST_USER")
-EMAIL_HOST_PASSWORD = config("EMAIL_HOST_PASSWORD")
-DEFAULT_FROM_EMAIL = EMAIL_HOST_USER
-
-SENDGRID_API_KEY = config("SENDGRID_API_KEY", default=None)
-SENDGRID_FROM_EMAIL = config("SENDGRID_FROM_EMAIL", default=EMAIL_HOST_USER)
-SENDGRID_TO_EMAIL = config("SENDGRID_TO_EMAIL", default=EMAIL_HOST_USER)
+if not RESEND_API_KEY:
+    raise ValueError("RESEND_API_KEY must be set in the environment")
+if not CONTACT_EMAIL:
+    raise ValueError("CONTACT_EMAIL must be set in the environment")
 
 LOGGING = {
     "version": 1,
