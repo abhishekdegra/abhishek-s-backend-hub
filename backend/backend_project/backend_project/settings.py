@@ -8,7 +8,8 @@ CORS_ALLOW_ALL_ORIGINS = config('CORS_ALLOW_ALL_ORIGINS', default=False, cast=bo
 CORS_ALLOW_CREDENTIALS = True
 
 # Provide sensible defaults for local development but allow override via .env
-_default_origins = "http://localhost:8081,http://127.0.0.1:8081,http://localhost:8080,http://127.0.0.1:8080,http://localhost:5173,https://abhishek-degra-portfolio1.vercel.app"raw_origins = config('CORS_ALLOWED_ORIGINS', default=_default_origins)
+_default_origins = "http://localhost:8081,http://127.0.0.1:8081,http://localhost:8080,http://127.0.0.1:8080,http://localhost:5173,https://abhishek-degra-portfolio1.vercel.app"
+raw_origins = config('CORS_ALLOWED_ORIGINS', default=_default_origins)
 CORS_ALLOWED_ORIGINS = [o.strip() for o in raw_origins.split(',') if o.strip()]
 # ================= SECURITY =================
 SECRET_KEY = "django-insecure-86)v$&@b6kts4xlxxuf$ehm6*(l0daa(q#la!%@itk61@jyvyr"
