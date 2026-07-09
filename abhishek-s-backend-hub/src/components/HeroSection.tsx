@@ -1,10 +1,10 @@
 import { motion } from "framer-motion";
 import { ArrowDown, FileText, Mail } from "lucide-react";
+import Magnetic from "@/components/animations/Magnetic";
 
 const HeroSection = () => {
   return (
-    <section className="relative min-h-screen flex items-center justify-center hero-gradient overflow-hidden">
-      {/* Floating particles */}
+    <section id="hero" className="relative min-h-screen flex items-center justify-center hero-gradient overflow-hidden">
       {[...Array(6)].map((_, i) => (
         <div
           key={i}
@@ -24,9 +24,12 @@ const HeroSection = () => {
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.6 }}
         >
-          <span className="inline-block px-4 py-1.5 rounded-full text-xs font-mono border border-primary/30 text-primary mb-6">
+          <motion.span
+            whileHover={{ y: -2, scale: 1.02, boxShadow: "0 0 30px rgba(128, 90, 213, 0.25)" }}
+            className="inline-block px-4 py-1.5 rounded-full text-xs font-mono border border-primary/30 text-primary mb-6"
+          >
             Python Backend & AI Developer
-          </span>
+          </motion.span>
         </motion.div>
 
         <motion.h1
@@ -54,25 +57,37 @@ const HeroSection = () => {
           transition={{ duration: 0.6, delay: 0.45 }}
           className="flex flex-col sm:flex-row items-center justify-center gap-4"
         >
-          <a
-            href="#projects"
-            className="px-6 py-3 rounded-lg font-medium text-primary-foreground bg-gradient-to-r from-primary to-accent hover:opacity-90 transition-opacity animate-gradient-shift"
-          >
-            View Projects
-          </a>
-          <a
-            href="#contact"
-            className="px-6 py-3 rounded-lg font-medium glass-card hover:bg-secondary/80 transition-colors flex items-center gap-2"
-          >
-            <Mail size={16} /> Contact Me
-          </a>
-          <a
-            href="/Abhishek_Degra_resume.pdf"
-            download
-            className="px-6 py-3 rounded-lg font-medium border border-border hover:border-primary/50 transition-colors flex items-center gap-2"
-          >
-            <FileText size={16} /> Download Resume
-          </a>
+          <Magnetic strength={0.1}>
+            <motion.a
+              href="#projects"
+              whileHover={{ y: -3, scale: 1.02 }}
+              whileTap={{ scale: 0.97 }}
+              className="px-6 py-3 rounded-lg font-medium text-primary-foreground bg-gradient-to-r from-primary to-accent hover:opacity-90 transition-opacity animate-gradient-shift inline-flex"
+            >
+              View Projects
+            </motion.a>
+          </Magnetic>
+          <Magnetic strength={0.1}>
+            <motion.a
+              href="#contact"
+              whileHover={{ y: -3, scale: 1.02 }}
+              whileTap={{ scale: 0.97 }}
+              className="px-6 py-3 rounded-lg font-medium glass-card hover:bg-secondary/80 transition-colors flex items-center gap-2"
+            >
+              <Mail size={16} /> Contact Me
+            </motion.a>
+          </Magnetic>
+          <Magnetic strength={0.1}>
+            <motion.a
+              href="/Abhishek_Degra_resume.pdf"
+              download
+              whileHover={{ y: -3, scale: 1.02 }}
+              whileTap={{ scale: 0.97 }}
+              className="px-6 py-3 rounded-lg font-medium border border-border hover:border-primary/50 transition-colors flex items-center gap-2"
+            >
+              <FileText size={16} /> Download Resume
+            </motion.a>
+          </Magnetic>
         </motion.div>
 
         <motion.div

@@ -1,7 +1,7 @@
 import { motion } from "framer-motion";
 import { useInView } from "framer-motion";
 import { useRef } from "react";
-import { Code2, Database, Server } from "lucide-react";
+import SectionReveal from "@/components/animations/SectionReveal";
 
 const AboutSection = () => {
   const ref = useRef(null);
@@ -10,23 +10,15 @@ const AboutSection = () => {
   return (
     <section id="about" className="section-padding" ref={ref}>
       <div className="max-w-5xl mx-auto">
-        <motion.div
-          initial={{ opacity: 0, y: 30 }}
-          animate={inView ? { opacity: 1, y: 0 } : {}}
-          transition={{ duration: 0.6 }}
-        >
+        <SectionReveal>
           <h2 className="text-3xl md:text-4xl font-bold mb-2">
             About <span className="gradient-text">Me</span>
           </h2>
           <div className="w-16 h-1 bg-gradient-to-r from-primary to-accent rounded mb-8" />
-        </motion.div>
+        </SectionReveal>
 
         <div className="grid md:grid-cols-[1fr_380px] gap-10 items-center">
-          <motion.div
-            initial={{ opacity: 0, x: -30 }}
-            animate={inView ? { opacity: 1, x: 0 } : {}}
-            transition={{ duration: 0.6, delay: 0.2 }}
-          >
+          <SectionReveal delay={0.1}>
             <p className="text-muted-foreground leading-relaxed mb-4">
               I am a Python Backend Developer specializing in building scalable backend systems, REST APIs, and AI-powered applications. With hands-on experience in Django, Django REST Framework, FastAPI, MySQL, and modern AI technologies, I enjoy transforming complex requirements into efficient and practical solutions.
             </p>
@@ -36,7 +28,7 @@ const AboutSection = () => {
             <p className="text-muted-foreground leading-relaxed">
               I am passionate about solving real-world problems, exploring modern AI technologies, and continuously improving my skills in backend engineering, intelligent systems, and scalable application development.
             </p>
-          </motion.div>
+          </SectionReveal>
 
           <motion.div
             initial={{ opacity: 0, x: 30 }}
@@ -48,6 +40,10 @@ const AboutSection = () => {
               <img
                 src="/profile.jpg"
                 alt="Abhishek Degra"
+                width="1127"
+                height="1396"
+                loading="lazy"
+                decoding="async"
                 onError={(e) => {
                   e.currentTarget.onerror = null;
                   e.currentTarget.src = "/placeholder.svg";

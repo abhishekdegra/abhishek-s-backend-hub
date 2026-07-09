@@ -1,7 +1,8 @@
 import { motion, useInView } from "framer-motion";
-import { useRef, useState } from "react";
+import { type FormEvent, useRef, useState } from "react";
 import { Github, Linkedin, Mail, Send } from "lucide-react";
 import toast from "react-hot-toast";
+import Magnetic from "@/components/animations/Magnetic";
 
 const ContactSection = () => {
   const ref = useRef(null);
@@ -37,8 +38,8 @@ const ContactSection = () => {
     setLoading(true);
 
     // Use env-configured API base if provided (Vite env var: VITE_API_BASE)
-    const apiBase = (import.meta as any).env?.VITE_API_BASE || "https://backend-web-portfolio.onrender.com";
-    const endpoint = `${apiBase.replace(/\/$/, '')}/api/contact/send/`;
+    const apiBase = import.meta.env.VITE_API_BASE || "https://backend-web-portfolio.onrender.com";
+    const endpoint = `${apiBase.replace(/\/$/, "")}/api/contact/send/`;
 
     try {
       const res = await fetch(endpoint, {
@@ -91,30 +92,39 @@ const ContactSection = () => {
             </p>
 
             <div className="space-y-4">
-              <a
-                href="https://www.linkedin.com/in/abhishek-degra/"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="flex items-center gap-4 glass-card p-4 hover:border-primary/40 transition-all"
-              >
-                <Linkedin size={20} /> LinkedIn
-              </a>
+              <Magnetic strength={0.12}>
+                <motion.a
+                  href="https://www.linkedin.com/in/abhishek-degra/"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  whileHover={{ y: -3, scale: 1.01 }}
+                  className="flex items-center gap-4 glass-card p-4 hover:border-primary/40 transition-all"
+                >
+                  <Linkedin size={20} /> LinkedIn
+                </motion.a>
+              </Magnetic>
 
-              <a
-                href="https://github.com/abhishekdegra"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="flex items-center gap-4 glass-card p-4 hover:border-primary/40 transition-all"
-              >
-                <Github size={20} /> GitHub
-              </a>
+              <Magnetic strength={0.12}>
+                <motion.a
+                  href="https://github.com/abhishekdegra"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  whileHover={{ y: -3, scale: 1.01 }}
+                  className="flex items-center gap-4 glass-card p-4 hover:border-primary/40 transition-all"
+                >
+                  <Github size={20} /> GitHub
+                </motion.a>
+              </Magnetic>
 
-              <a
-                href="mailto:degraabhishek@gmail.com"
-                className="flex items-center gap-4 glass-card p-4 hover:border-primary/40 transition-all"
-              >
-                <Mail size={20} /> Email
-              </a>
+              <Magnetic strength={0.12}>
+                <motion.a
+                  href="mailto:degraabhishek@gmail.com"
+                  whileHover={{ y: -3, scale: 1.01 }}
+                  className="flex items-center gap-4 glass-card p-4 hover:border-primary/40 transition-all"
+                >
+                  <Mail size={20} /> Email
+                </motion.a>
+              </Magnetic>
             </div>
           </motion.div>
 
@@ -126,36 +136,53 @@ const ContactSection = () => {
             transition={{ duration: 0.5, delay: 0.3 }}
             className="glass-card p-6 space-y-4"
           >
-            <input
-              type="text"
-              placeholder="Your Name"
-              required
-              value={form.name}
-              onChange={(e) => setForm({ ...form, name: e.target.value })}
-              className="w-full px-4 py-3 rounded-lg bg-secondary border border-border text-foreground text-sm focus:outline-none"
+<label htmlFor="contact-name" className="sr-only">
+            Your Name
+          </label>
+          <input
+            id="contact-name"
+            type="text"
+            placeholder="Your Name"
+            aria-label="Your name"
+            required
+            value={form.name}
+            onChange={(e) => setForm({ ...form, name: e.target.value })}
+            className="w-full px-4 py-3 rounded-lg bg-secondary border border-border text-foreground text-sm focus:outline-none focus-visible:ring-2 focus-visible:ring-primary/60"
+          />
+
+          <label htmlFor="contact-email" className="sr-only">
+            Your Email
+          </label>
+          <input
+            id="contact-email"
+            type="email"
+            placeholder="Your Email"
+            aria-label="Your email"
+            required
+            value={form.email}
+            onChange={(e) => setForm({ ...form, email: e.target.value })}
+            className="w-full px-4 py-3 rounded-lg bg-secondary border border-border text-foreground text-sm focus:outline-none focus-visible:ring-2 focus-visible:ring-primary/60"
+          />
+
+          <label htmlFor="contact-message" className="sr-only">
+            Your Message
+          </label>
+          <textarea
+            id="contact-message"
+            placeholder="Your Message"
+            aria-label="Your message"
+            rows={4}
+            required
+            value={form.message}
+            onChange={(e) => setForm({ ...form, message: e.target.value })}
+            className="w-full px-4 py-3 rounded-lg bg-secondary border border-border text-foreground text-sm focus:outline-none focus-visible:ring-2 focus-visible:ring-primary/60 resize-none"
             />
 
-            <input
-              type="email"
-              placeholder="Your Email"
-              required
-              value={form.email}
-              onChange={(e) => setForm({ ...form, email: e.target.value })}
-              className="w-full px-4 py-3 rounded-lg bg-secondary border border-border text-foreground text-sm focus:outline-none"
-            />
-
-            <textarea
-              placeholder="Your Message"
-              rows={4}
-              required
-              value={form.message}
-              onChange={(e) => setForm({ ...form, message: e.target.value })}
-              className="w-full px-4 py-3 rounded-lg bg-secondary border border-border text-foreground text-sm focus:outline-none resize-none"
-            />
-
-            <button
+            <motion.button
               type="submit"
               disabled={loading}
+              whileHover={{ y: -2, scale: 1.01 }}
+              whileTap={{ scale: 0.98 }}
               className="w-full px-6 py-3 rounded-lg bg-gradient-to-r from-primary to-accent text-white flex items-center justify-center gap-2"
             >
               {loading ? "⏳ Sending..." : (
@@ -163,7 +190,7 @@ const ContactSection = () => {
                   <Send size={16} /> Send Message
                 </>
               )}
-            </button>
+            </motion.button>
           </motion.form>
         </div>
       </div>

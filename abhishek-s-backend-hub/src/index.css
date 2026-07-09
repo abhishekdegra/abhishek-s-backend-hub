@@ -1,5 +1,3 @@
-@import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600;700&family=Space+Grotesk:wght@400;500;600;700&display=swap');
-
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
@@ -74,6 +72,11 @@
   html {
     scroll-behavior: smooth;
   }
+
+  ::selection {
+    background: hsl(var(--primary) / 0.35);
+    color: hsl(var(--foreground));
+  }
 }
 
 @layer utilities {
@@ -120,6 +123,39 @@
   .section-padding {
     @apply py-20 md:py-28 px-4 md:px-8;
   }
+
+  .magnetic {
+    will-change: transform;
+  }
+
+  .sr-only {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    white-space: nowrap;
+    border: 0;
+  }
+
+  .focus-visible-ring:focus-visible {
+    outline: 2px solid hsl(var(--primary));
+    outline-offset: 4px;
+  }
+}
+
+body.cursor-hidden {
+  cursor: none;
+}
+
+body.cursor-hidden a,
+body.cursor-hidden button,
+body.cursor-hidden input,
+body.cursor-hidden textarea,
+body.cursor-hidden select {
+  cursor: none;
 }
 
 /* Animated background particles */

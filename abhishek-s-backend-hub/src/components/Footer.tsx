@@ -9,15 +9,16 @@ const Footer = () => {
         </p>
         <div className="flex items-center gap-4">
           {[
-            { icon: Linkedin, href: "https://www.linkedin.com/in/abhishek-degra/" },
-            { icon: Github, href: "https://github.com/abhishekdegra" },
-            { icon: Mail, href: "mailto:degraabhishek@gmail.com" },
+            { icon: Linkedin, href: "https://www.linkedin.com/in/abhishek-degra/", label: "LinkedIn" },
+            { icon: Github, href: "https://github.com/abhishekdegra", label: "GitHub" },
+            { icon: Mail, href: "mailto:degraabhishek@gmail.com", label: "Email" },
           ].map((s, i) => (
             <a
               key={i}
               href={s.href}
               target="_blank"
               rel="noopener noreferrer"
+              aria-label={s.label}
               className="p-2 rounded-lg text-muted-foreground hover:text-primary hover:bg-primary/10 transition-all"
             >
               <s.icon size={18} />

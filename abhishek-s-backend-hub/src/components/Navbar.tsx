@@ -1,6 +1,8 @@
 import { useState, useEffect } from "react";
 import { Menu, X } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
+import Magnetic from "@/components/animations/Magnetic";
+import ProfileBrand from "@/components/navbar/ProfileBrand";
 
 const navLinks = [
   { label: "About", href: "#about" },
@@ -24,38 +26,45 @@ const Navbar = () => {
 
   return (
     <nav
+      aria-label="Primary navigation"
       className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${
         scrolled ? "glass-card border-b border-border/50 shadow-lg" : "bg-transparent"
       }`}
     >
       <div className="max-w-7xl mx-auto px-4 md:px-8 flex items-center justify-between h-16">
-        <a href="#" className="text-xl font-bold gradient-text">
-          AD
-        </a>
+        <ProfileBrand />
 
-        {/* Desktop */}
         <div className="hidden md:flex items-center gap-6">
           {navLinks.map((link) => (
-            <a
-              key={link.href}
-              href={link.href}
-              className="text-sm text-muted-foreground hover:text-foreground transition-colors"
-            >
-              {link.label}
-            </a>
+            <Magnetic key={link.href} strength={0.12}>
+              <motion.a
+                href={link.href}
+                whileHover={{ y: -2, scale: 1.03, color: "hsl(var(--foreground))" }}
+                whileTap={{ scale: 0.97 }}
+                className="relative px-2 py-1 text-sm text-muted-foreground hover:text-foreground transition-colors"
+              >
+                <span className="relative z-10">{link.label}</span>
+                <motion.span
+                  className="absolute inset-x-0 bottom-0 h-px rounded-full bg-gradient-to-r from-primary to-accent"
+                  initial={{ scaleX: 0, opacity: 0 }}
+                  whileHover={{ scaleX: 1, opacity: 1 }}
+                  transition={{ duration: 0.2 }}
+                />
+              </motion.a>
+            </Magnetic>
           ))}
         </div>
 
-        {/* Mobile toggle */}
-        <button
+        <motion.button
+          whileTap={{ scale: 0.95 }}
           className="md:hidden text-foreground"
           onClick={() => setIsOpen(!isOpen)}
+          aria-label={isOpen ? "Close navigation menu" : "Open navigation menu"}
         >
           {isOpen ? <X size={24} /> : <Menu size={24} />}
-        </button>
+        </motion.button>
       </div>
 
-      {/* Mobile menu */}
       <AnimatePresence>
         {isOpen && (
           <motion.div
