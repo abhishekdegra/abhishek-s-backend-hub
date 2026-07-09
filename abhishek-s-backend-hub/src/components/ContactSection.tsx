@@ -51,7 +51,7 @@ const ContactSection = () => {
 
       const data = await res.json();
 
-      if (res.ok && data.status === "success") {
+      if (res.ok && data.success) {
         toast.success("Message sent successfully 🔥");
         setForm({ name: "", email: "", message: "" });
       } else {
