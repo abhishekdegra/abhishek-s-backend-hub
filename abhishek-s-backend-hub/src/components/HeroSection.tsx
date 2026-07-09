@@ -79,7 +79,7 @@ const HeroSection = () => {
           </Magnetic>
           <Magnetic strength={0.1}>
             <motion.a
-              href="/Abhishek_Degra_resume.pdf"
+              href="/Abhishek-Degra-Python-Backend-AI-Developer-Resume.pdf"
               download
               whileHover={{ y: -3, scale: 1.02 }}
               whileTap={{ scale: 0.97 }}
