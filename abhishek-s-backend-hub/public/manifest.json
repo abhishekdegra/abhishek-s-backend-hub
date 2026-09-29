@@ -1,21 +1,28 @@
 {
-  "name": "Abhishek Degra Portfolio",
-  "short_name": "Abhishek",
-  "description": "Portfolio of Python Backend Developer and AI Engineer Abhishek Degra.",
+  "name": "Abhishek Degra",
+  "short_name": "Abhishek Degra",
+  "description": "Official portfolio of Abhishek Degra, Python Backend and AI Developer.",
   "start_url": "/",
   "display": "standalone",
   "background_color": "#130C19",
   "theme_color": "#130C19",
   "icons": [
     {
+      "src": "/favicon.ico",
+      "sizes": "16x16 32x32 48x48",
+      "type": "image/x-icon"
+    },
+    {
       "src": "/favicon.png",
       "sizes": "192x192",
-      "type": "image/png"
+      "type": "image/png",
+      "purpose": "any"
     },
     {
       "src": "/favicon.png",
       "sizes": "512x512",
-      "type": "image/png"
+      "type": "image/png",
+      "purpose": "any"
     }
   ]
 }

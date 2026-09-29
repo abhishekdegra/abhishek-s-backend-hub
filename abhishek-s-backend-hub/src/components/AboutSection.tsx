@@ -1,63 +1,91 @@
-import { motion } from "framer-motion";
-import { useInView } from "framer-motion";
 import { useRef } from "react";
+import { useInView } from "framer-motion";
 import SectionReveal from "@/components/animations/SectionReveal";
+import DataStreamText from "./about/DataStreamText";
+import Profile3DCard from "./about/Profile3DCard";
 
 const AboutSection = () => {
-  const ref = useRef(null);
-  const inView = useInView(ref, { once: true, margin: "-100px" });
+  const sectionRef = useRef<HTMLElement>(null);
+  const inView = useInView(sectionRef, { once: true, margin: "-100px" });
 
   return (
-    <section id="about" className="section-padding" ref={ref}>
-      <div className="max-w-5xl mx-auto">
+    <section id="about" className="section-padding relative overflow-hidden" ref={sectionRef}>
+      {/* Background ambient lighting accents */}
+      <div
+        aria-hidden="true"
+        className="pointer-events-none absolute top-1/3 -left-32 w-96 h-96 rounded-full bg-primary/10 blur-[120px]"
+      />
+      <div
+        aria-hidden="true"
+        className="pointer-events-none absolute bottom-10 -right-32 w-80 h-80 rounded-full bg-accent/8 blur-[100px]"
+      />
+
+      <div className="max-w-6xl mx-auto relative z-10">
+        {/* Section Header */}
         <SectionReveal>
-          <h2 className="text-3xl md:text-4xl font-bold mb-2">
+          <div className="flex items-center gap-2 mb-2">
+            <span className="text-xs font-mono text-primary font-semibold tracking-widest uppercase">
+              AI ENGINEER PROFILE
+            </span>
+            <span className="h-px flex-1 max-w-[80px] bg-primary/30" />
+          </div>
+
+          <h2 className="text-3xl md:text-5xl font-bold mb-3 tracking-tight font-heading">
             About <span className="gradient-text">Me</span>
           </h2>
-          <div className="w-16 h-1 bg-gradient-to-r from-primary to-accent rounded mb-8" />
+          <div className="w-20 h-1 bg-gradient-to-r from-primary to-accent rounded-full mb-10" />
         </SectionReveal>
 
-        <div className="grid md:grid-cols-[1fr_380px] gap-10 items-center">
-          <SectionReveal delay={0.1}>
-            <p className="text-muted-foreground leading-relaxed mb-4">
-              I am a Python Backend Developer specializing in building scalable backend systems, REST APIs, and AI-powered applications. With hands-on experience in Django, Django REST Framework, FastAPI, MySQL, and modern AI technologies, I enjoy transforming complex requirements into efficient and practical solutions.
-            </p>
-            <p className="text-muted-foreground leading-relaxed mb-4">
-              My experience includes developing backend systems, integrating third-party APIs, and building custom AI agents using RAG, vector embeddings, semantic search, multilingual query understanding, and dynamic tool routing.
-            </p>
-            <p className="text-muted-foreground leading-relaxed">
-              I am passionate about solving real-world problems, exploring modern AI technologies, and continuously improving my skills in backend engineering, intelligent systems, and scalable application development.
-            </p>
-          </SectionReveal>
+        {/* 2-Column Responsive Layout: Left = Electric Data Stream Text, Right = 3D Digital Twin Portrait */}
+        <div className="grid lg:grid-cols-[1fr_400px] gap-8 sm:gap-10 lg:gap-14 items-center">
+          {/* Left Column: Data Stream Reveal */}
+          <div className="flex flex-col justify-center">
+            <DataStreamText inView={inView} />
 
-          <motion.div
-            initial={{ opacity: 0, x: 30 }}
-            animate={inView ? { opacity: 1, x: 0 } : {}}
-            transition={{ duration: 0.6, delay: 0.4 }}
-            className="glass-card p-4 border border-border/50 shadow-xl overflow-hidden"
-          >
-            <div className="relative overflow-hidden rounded-[2rem] bg-gradient-to-br from-primary/10 to-accent/10">
-              <img
-                src="/profile.jpg"
-                alt="Abhishek Degra"
-                width="1127"
-                height="1396"
-                loading="lazy"
-                decoding="async"
-                onError={(e) => {
-                  e.currentTarget.onerror = null;
-                  e.currentTarget.src = "/placeholder.svg";
-                }}
-                className="w-full aspect-square object-cover"
-              />
+            {/* Engineering Highlights Quick Bar */}
+            <div className="mt-6 sm:mt-8 pt-5 sm:pt-6 border-t border-border/60 grid grid-cols-2 sm:grid-cols-4 gap-2.5 sm:gap-4">
+              <div className="p-3 rounded-xl bg-card/60 border border-border/70 backdrop-blur-sm">
+                <span className="text-[10px] font-mono text-muted-foreground block mb-0.5">
+                  CORE SPECIALTY
+                </span>
+                <span className="text-xs font-bold text-foreground font-mono">
+                  Python Backend
+                </span>
+              </div>
+
+              <div className="p-3 rounded-xl bg-card/60 border border-border/70 backdrop-blur-sm">
+                <span className="text-[10px] font-mono text-muted-foreground block mb-0.5">
+                  AI FOCUS
+                </span>
+                <span className="text-xs font-bold text-primary font-mono">
+                  RAG & Agents
+                </span>
+              </div>
+
+              <div className="p-3 rounded-xl bg-card/60 border border-border/70 backdrop-blur-sm">
+                <span className="text-[10px] font-mono text-muted-foreground block mb-0.5">
+                  ARCHITECTURE
+                </span>
+                <span className="text-xs font-bold text-foreground font-mono">
+                  REST & FastAPIs
+                </span>
+              </div>
+
+              <div className="p-3 rounded-xl bg-card/60 border border-border/70 backdrop-blur-sm">
+                <span className="text-[10px] font-mono text-muted-foreground block mb-0.5">
+                  DEPLOYMENT
+                </span>
+                <span className="text-xs font-bold text-accent font-mono">
+                  Production Ready
+                </span>
+              </div>
             </div>
-            <div className="mt-6 text-center">
-              <h3 className="text-xl font-semibold text-foreground mb-1">Abhishek Degra</h3>
-              <p className="text-sm text-muted-foreground">
-                Python Backend & AI Developer
-              </p>
-            </div>
-          </motion.div>
+          </div>
+
+          {/* Right Column: 3D Interactive Portrait */}
+          <div className="flex justify-center w-full">
+            <Profile3DCard sectionRef={sectionRef} />
+          </div>
         </div>
       </div>
     </section>

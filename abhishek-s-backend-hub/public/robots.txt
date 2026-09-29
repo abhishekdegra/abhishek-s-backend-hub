@@ -2,4 +2,3 @@ User-agent: *
 Allow: /
 
 Sitemap: https://abhishek-degra-portfolio1.vercel.app/sitemap.xml
-Host: https://abhishek-degra-portfolio1.vercel.app/

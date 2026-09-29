@@ -1,107 +1,106 @@
-import { motion, useInView } from "framer-motion";
-import { useRef } from "react";
-import { ExternalLink } from "lucide-react";
-import TiltCard from "@/components/animations/TiltCard";
+import { useState, useRef } from "react";
+import { motion, useInView, AnimatePresence } from "framer-motion";
 import SectionReveal from "@/components/animations/SectionReveal";
-
-const projects = [
-  {
-    title: "AI-Powered E-Commerce Customer Support Agent",
-    description: "Built a custom AI-powered customer support agent for an e-commerce platform with intelligent query understanding, multilingual support, real-time API integration, and dynamic tool routing.",
-    features: [
-      "Intelligent intent detection and entity extraction",
-      "RAG-based knowledge retrieval for policies and FAQs",
-      "Vector embeddings and semantic search",
-      "Dynamic tool routing for products, orders, refunds, tracking, invoices, and user queries",
-      "Multilingual and Hinglish query understanding",
-      "Real-time integration with e-commerce backend APIs",
-      "Multi-LLM integration and fallback support",
-      "Optimized AI workflow to reduce unnecessary LLM calls and response time",
-    ],
-    tech: ["Python", "Django REST Framework", "RAG", "Vector Embeddings", "LLM APIs", "REST APIs"],
-    github: "https://github.com/abhishekdegra/ai-agent-for-welfog.git",
-  },
-  {
-    title: "CRM Backend System",
-    description: "Built a CRM backend system using Django REST Framework and MySQL.",
-    features: ["CRUD APIs for leads, customers, tickets and services", "Filtering, pagination and search", "JWT authentication", "Role-based access control", "Postman tested APIs"],
-    tech: ["Python", "Django REST Framework", "MySQL", "JWT"],
-    github: "https://github.com/abhishekdegra/crm-backend-django.git",
-  },
-  {
-    title: "Hotel Management System Backend",
-    description: "Developed a scalable backend system for hotel operations.",
-    features: ["Booking management", "Check-in / check-out system", "Billing and payment management", "Role-based authentication", "Optimized database queries"],
-    tech: ["Python", "Django", "Django REST Framework", "MySQL"],
-    github: "https://github.com/akshmat243/HMS.git",
-  },
-  {
-    title: "Learning Management System (LMS) Backend",
-    description: "Backend for an online learning platform.",
-    features: ["Course management APIs", "Student enrollment system", "Authentication and authorization", "Filtering, pagination and search", "Clean scalable architecture"],
-    tech: ["Python", "Django REST Framework", "MySQL"],
-    github: "https://github.com/abhishekdegra/lms-backend-django.git",
-  },
-];
+import { ALL_PROJECTS, ProjectCategory } from "./projects/projectsData";
+import FeaturedProjectCard from "./projects/FeaturedProjectCard";
+import ProjectCard from "./projects/ProjectCard";
+import ProjectFilter from "./projects/ProjectFilter";
 
 const ProjectsSection = () => {
-  const ref = useRef(null);
-  const inView = useInView(ref, { once: true, margin: "-100px" });
+  const [activeCategory, setActiveCategory] = useState<ProjectCategory>("ALL");
+  const sectionRef = useRef<HTMLElement>(null);
+  const inView = useInView(sectionRef, { once: true, margin: "-100px" });
+
+  // Filter projects according to selected category
+  const filteredProjects = ALL_PROJECTS.filter((p) => {
+    if (activeCategory === "ALL") return true;
+    return p.category.includes(activeCategory);
+  });
+
+  // Separate the featured AI agent from secondary project cards
+  const featuredInFilter = filteredProjects.find((p) => p.featured);
+  const secondaryProjects = filteredProjects.filter((p) => !p.featured);
 
   return (
-    <section id="projects" className="section-padding" ref={ref}>
-      <div className="max-w-6xl mx-auto">
+    <section id="projects" className="section-padding relative overflow-hidden" ref={sectionRef}>
+      {/* Background ambient lighting accents */}
+      <div
+        aria-hidden="true"
+        className="pointer-events-none absolute top-1/4 -right-32 w-96 h-96 rounded-full bg-primary/10 blur-[130px]"
+      />
+      <div
+        aria-hidden="true"
+        className="pointer-events-none absolute bottom-1/4 -left-32 w-96 h-96 rounded-full bg-accent/8 blur-[120px]"
+      />
+
+      <div className="max-w-6xl mx-auto relative z-10">
+        {/* Section Header: PROJECT LAB */}
         <SectionReveal>
-          <h2 className="text-3xl md:text-4xl font-bold mb-2">
-            My <span className="gradient-text">Projects</span>
+          <div className="flex items-center gap-2 mb-2">
+            <span className="text-xs font-mono text-primary font-semibold tracking-widest uppercase">
+              ENGINEERING PROJECTS
+            </span>
+            <span className="h-px flex-1 max-w-[80px] bg-primary/30" />
+          </div>
+
+          <h2 className="text-3xl md:text-5xl font-bold mb-3 tracking-tight font-heading">
+            Things I've <span className="gradient-text">Built</span>
           </h2>
-          <div className="w-16 h-1 bg-gradient-to-r from-primary to-accent rounded mb-10" />
+          <p className="text-muted-foreground text-sm md:text-base max-w-2xl mb-8 leading-relaxed">
+            Backend systems, AI agents and intelligent applications built to solve real-world problems.
+          </p>
         </SectionReveal>
 
-        <div className="grid md:grid-cols-2 gap-6">
-          {projects.map((project, i) => (
-            <TiltCard key={project.title} intensity={10} className="glass-card p-6 group hover:border-primary/40 transition-all duration-300">
+        {/* Category Filter Navigation */}
+        <ProjectFilter
+          activeCategory={activeCategory}
+          onSelectCategory={setActiveCategory}
+        />
+
+        {/* 1. Featured Hero AI Case Study (when matching filter) */}
+        {featuredInFilter && (
+          <motion.div
+            initial={{ opacity: 0, y: 30 }}
+            animate={inView ? { opacity: 1, y: 0 } : {}}
+            transition={{ duration: 0.6 }}
+          >
+            <FeaturedProjectCard />
+          </motion.div>
+        )}
+
+        {/* 2. Secondary Engineering Case Studies Header (if featured is displayed) */}
+        {secondaryProjects.length > 0 && (
+          <div className="mb-6 flex items-center justify-between border-b border-border/60 pb-3">
+            <div className="flex items-center gap-2">
+              <span className="w-2 h-2 rounded-sm bg-accent" />
+              <h3 className="text-sm font-mono font-bold tracking-wider text-foreground uppercase">
+                BACKEND & ENTERPRISE ARCHITECTURE CASE STUDIES
+              </h3>
+            </div>
+          </div>
+        )}
+
+        {/* 3. Secondary Project Cards Grid */}
+        <AnimatePresence mode="popLayout">
+          <motion.div
+            layout
+            className="grid md:grid-cols-2 lg:grid-cols-3 gap-6"
+          >
+            {secondaryProjects.map((project, idx) => (
               <motion.div
-                initial={{ opacity: 0, y: 30 }}
-                animate={inView ? { opacity: 1, y: 0 } : {}}
-                transition={{ duration: 0.5, delay: i * 0.12 }}
+                key={project.id}
+                layout
+                initial={{ opacity: 0, scale: 0.95 }}
+                animate={{ opacity: 1, scale: 1 }}
+                exit={{ opacity: 0, scale: 0.95 }}
+                transition={{ duration: 0.4, delay: idx * 0.08 }}
+                className="h-full"
               >
-                <h3 className="text-xl font-bold mb-2 text-foreground group-hover:text-primary transition-colors">
-                  {project.title}
-                </h3>
-                <p className="text-sm text-muted-foreground mb-4">{project.description}</p>
-
-                <ul className="space-y-1 mb-5">
-                  {project.features.map((f, fi) => (
-                    <li key={fi} className="text-xs text-muted-foreground flex items-start gap-2">
-                      <span className="text-primary mt-0.5">▹</span> {f}
-                    </li>
-                  ))}
-                </ul>
-
-                <div className="flex flex-wrap gap-2 mb-4">
-                  {project.tech.map((t) => (
-                    <span
-                      key={t}
-                      className="text-xs px-2.5 py-1 rounded-full bg-primary/10 text-primary font-mono"
-                    >
-                      {t}
-                    </span>
-                  ))}
-                </div>
-
-                <a
-                  href={project.github}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="inline-flex items-center gap-1.5 text-sm text-accent hover:text-primary transition-colors"
-                >
-                  <ExternalLink size={14} /> GitHub
-                </a>
+                <ProjectCard project={project} index={idx} />
               </motion.div>
-            </TiltCard>
-          ))}
-        </div>
+            ))}
+          </motion.div>
+        </AnimatePresence>
       </div>
     </section>
   );
